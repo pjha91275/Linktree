@@ -5,10 +5,10 @@ import { notFound } from "next/navigation";
 export default async function Page({ params }) {
   const handle = (await params).handle
   const client = await clientPromise;
-  const db = client.db("bittree")
+  const db = client.db("Linktree")
   const collection = db.collection("links")
 
-  // If the handle is already claimed, you cannot create the bittree
+  // If the handle is already claimed, you cannot create the Linktree
   const item = await collection.findOne({ handle: handle })
 
   if (!item) {
@@ -62,7 +62,7 @@ export default async function Page({ params }) {
 
           {/* Branding */}
           <div className="mt-8 opacity-70 hover:opacity-100 transition-opacity">
-            <span className="text-xs font-bold text-gray-500 tracking-widest uppercase">Created with <span className="text-gray-800">BitTree</span></span>
+            <span className="text-xs font-bold text-gray-500 tracking-widest uppercase">Created with <span className="text-gray-800">Linktree</span></span>
           </div>
 
         </div>

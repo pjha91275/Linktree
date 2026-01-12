@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 const Generate = () => {
   const searchParams = useSearchParams();
@@ -10,6 +11,7 @@ const Generate = () => {
   const [handle, sethandle] = useState(searchParams.get("handle") || "");
   const [pic, setpic] = useState("");
   const [desc, setdesc] = useState("");
+  const [createdHandle, setCreatedHandle] = useState("");
 
   const handleChange = (index, link, linktext) => {
     setlinks((prevLinks) => {
@@ -46,10 +48,13 @@ const Generate = () => {
       const result = await r.json();
       if (result.success) {
         toast.success(result.message);
+        setCreatedHandle(handle);
         setlinks([{ link: "", linktext: "" }]);
         sethandle("");
         setpic("");
         setdesc("");
+        // Scroll to top to show the success message
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         toast.error(result.message);
       }
@@ -68,10 +73,25 @@ const Generate = () => {
           <div className="flex flex-col gap-8">
             <header className="mb-6">
               <h1 className="font-extrabold text-5xl text-white mb-3 tracking-tight">
-                Create your <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-lime-300">BitTree</span>
+                Create your <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-lime-300">Linktree</span>
               </h1>
               <p className="text-white text-xl font-medium">Connect your world in one single link.</p>
             </header>
+
+            {createdHandle && (
+              <div className="mb-8 p-6 bg-green-50 rounded-3xl border border-green-200 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg animate-[fadeIn_0.5s_ease-out]">
+                <div>
+                  <h3 className="font-bold text-2xl text-green-800 text-center sm:text-left">Linktree Created! 🚀</h3>
+                  <p className="text-green-700 font-medium text-center sm:text-left mt-1">Your profile is live and ready to share.</p>
+                </div>
+                <Link
+                  href={`/${createdHandle}`}
+                  className="py-4 px-8 bg-green-600 hover:bg-green-700 text-white font-bold text-lg rounded-full transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-green-500/30 flex items-center gap-2"
+                >
+                  Visit Profile <span className="text-xl">→</span>
+                </Link>
+              </div>
+            )}
 
             {/* Step 1 */}
             <div className="group bg-white rounded-3xl shadow-sm hover:shadow-md border border-gray-100 p-8 transition-all duration-300">
@@ -80,13 +100,16 @@ const Generate = () => {
                 <h2 className="font-bold text-2xl text-gray-800">Claim your Handle</h2>
               </div>
               <div className="relative">
-                <input
-                  value={handle}
-                  onChange={(e) => sethandle(e.target.value)}
-                  type="text"
-                  className="w-full bg-gray-50 border-2 border-transparent focus:border-indigo-500 rounded-2xl px-6 py-4 text-lg font-medium outline-none transition-all placeholder:text-gray-400 hover:bg-gray-100"
-                  placeholder="Choose a Handle (e.g., pjha)"
-                />
+                <div className="w-full bg-gray-50 border-2 border-transparent focus-within:border-indigo-500 rounded-2xl px-6 py-4 flex items-center transition-all hover:bg-gray-100 placeholder:text-gray-400">
+                  <span className="text-lg font-bold text-gray-500 mr-1 select-none whitespace-nowrap">linktr.ee/</span>
+                  <input
+                    value={handle}
+                    onChange={(e) => sethandle(e.target.value)}
+                    type="text"
+                    className="w-full bg-transparent outline-none text-lg font-medium text-gray-800"
+                    placeholder="pjha"
+                  />
+                </div>
               </div>
             </div>
 
@@ -157,8 +180,9 @@ const Generate = () => {
               onClick={submitLinks}
               className="w-full py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-extrabold text-2xl rounded-3xl shadow-xl hover:shadow-indigo-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:-translate-y-1 hover:brightness-110"
             >
-              Create your BitTree
+              Create your Linktree
             </button>
+
           </div>
 
           {/* Right Column: Mobile Preview */}
@@ -222,7 +246,7 @@ const Generate = () => {
                 {/* Branding Footer */}
                 <div className="mt-auto pt-8 flex flex-col items-center">
                   <div className="w-8 h-1 bg-gray-300 rounded-full mb-2"></div>
-                  <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase opacity-70">BitTree</span>
+                  <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase opacity-70">Linktree</span>
                 </div>
               </div>
             </div>
