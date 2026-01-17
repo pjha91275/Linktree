@@ -29,9 +29,12 @@ const GenerateClient = () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
+    const validHandle = handle.replace(/\s+/g, "").toLowerCase()
+    const validLinks = links.filter(l => l.link && l.linktext);
+
     const raw = JSON.stringify({
-      links: links,
-      handle: handle,
+      links: validLinks,
+      handle: validHandle,
       pic: pic,
       desc: desc,
     });
@@ -48,7 +51,7 @@ const GenerateClient = () => {
       const result = await r.json();
       if (result.success) {
         toast.success(result.message);
-        setCreatedHandle(handle);
+        setCreatedHandle(validHandle);
         setlinks([{ link: "", linktext: "" }]);
         sethandle("");
         setpic("");
@@ -107,7 +110,7 @@ const GenerateClient = () => {
                     onChange={(e) => sethandle(e.target.value)}
                     type="text"
                     className="w-full bg-transparent outline-none text-lg font-medium text-gray-800"
-                    placeholder="pjha"
+                    placeholder=""
                   />
                 </div>
               </div>

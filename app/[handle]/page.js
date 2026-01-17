@@ -3,17 +3,17 @@ import clientPromise from "@/lib/mongodb"
 import { notFound } from "next/navigation";
 
 export default async function Page({ params }) {
-  const handle = (await params).handle
+  const { handle } = await params;   
+  if (!handle) {
+    return notFound()
+  }
+  const normalizedHandle = handle.trim().toLowerCase();
   const client = await clientPromise;
   const db = client.db("Linktree")
   const collection = db.collection("links")
 
   // If the handle is already claimed, you cannot create the Linktree
-  const item = await collection.findOne({ handle: handle })
-
-  if (!item) {
-    return notFound()
-  }
+  const item = await collection.findOne({ handle: normalizedHandle })
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 justify-center items-center py-10 px-4">
